@@ -33,12 +33,12 @@ if uploaded_file is not None:
         age_data.index = age_data.index.str.extract(r'계_(.*)')[0]
 
         # Plot age distribution
-        fig, ax = plt.subplots(figsize=(10, 5))
-        age_data.plot(kind="bar", color="skyblue", ax=ax)
-        ax.set_title("연령대별 인구 분포")
-        ax.set_xlabel("연령")
-        ax.set_ylabel("인구수")
-        st.pyplot(fig)
+        plt.figure(figsize=(10, 5))
+        age_data.plot(kind="bar", color="skyblue")
+        plt.title("연령대별 인구 분포")
+        plt.xlabel("연령")
+        plt.ylabel("인구수")
+        st.pyplot(plt)
     else:
         st.warning("연령대별 데이터를 찾을 수 없습니다.")
 
@@ -46,5 +46,16 @@ if uploaded_file is not None:
     st.subheader("지역별 총 인구 분석")
     if '2008년02월_계_총인구수' in df.columns:
         regional_data = df[['행정구역', '2008년02월_계_총인구수']].copy()
-        regional_data['2008년02월_계_총인구수'] = regional_data['2008년02월_계_총인구수'].str.replace(',', '').astype(int)
-   
+        # Ensure the column is treated as string before applying .str methods
+        regional_data['2008년02월_계_총인구수'] = regional_data['2008년02월_계_총인구수'].astype(str).str.replace(',', '').astype(int)
+        regional_data = regional_data.sort_values('2008년02월_계_총인구수', ascending=False).head(10)
+
+        # Plot regional population
+        plt.figure(figsize=(10, 5))
+        plt.barh(regional_data['행정구역'], regional_data['2008년02월_계_총인구수'], color="orange")
+        plt.xlabel("총 인구수")
+        plt.ylabel("행정구역")
+        plt.title("상위 10개 지역 총 인구수")
+        st.pyplot(plt)
+    else:
+        st.warning("총 인구 데이터를 찾을 수 없습니다.")
