@@ -58,3 +58,4 @@ if uploaded_file is not None:
         st.pyplot(plt)
     else:
         st.warning("총 인구 데이터를 찾을 수 없습니다.")
+
