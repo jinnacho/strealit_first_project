@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-import koreanize-matplotlib
+import koreanize_matplotlib
 # Streamlit App Title
 st.title("인구 분석 도구")
 
