@@ -1,18 +1,18 @@
-import streamlit as st
 from pdf2image import convert_from_path
 from pptx import Presentation
 from pptx.util import Inches
 import os
 
-def pdf_to_pptx(pdf_path, output_path):
+def pdf_to_pptx(pdf_path, output_path, poppler_path=None):
     """
     Converts a PDF file to a PPTX file by converting each page into an image.
-    
+
     :param pdf_path: Path to the input PDF file
     :param output_path: Path to the output PPTX file
+    :param poppler_path: Path to the poppler binaries (for Windows users)
     """
     # Convert PDF pages to images
-    images = convert_from_path(pdf_path)
+    images = convert_from_path(pdf_path, poppler_path=poppler_path)
     
     # Create a PowerPoint presentation
     presentation = Presentation()
@@ -48,7 +48,11 @@ if uploaded_file is not None:
 
     # Convert the PDF to PPTX
     output_path = "output_presentation.pptx"
-    pdf_to_pptx(pdf_path, output_path)
+    poppler_path = None
+    if os.name == "nt":  # Windows
+        poppler_path = r"C:\\path\\to\\poppler\\bin"  # Adjust this to your Poppler path
+    
+    pdf_to_pptx(pdf_path, output_path, poppler_path)
 
     # Provide the PPTX file for download
     with open(output_path, "rb") as f:
