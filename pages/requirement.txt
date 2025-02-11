@@ -4,3 +4,4 @@ python-pptx
 Pillow
 koreanize_matplotlib
 px
+plotly
