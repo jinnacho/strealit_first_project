@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
-import plotly
-import plotly.express as px
+import matplotlib.pyplot as plt
+import koreanize_matplotlib  # 한글 폰트 설정
 
 # 데이터 로드 (예제 데이터)
 data = pd.DataFrame({
@@ -13,15 +13,20 @@ data = pd.DataFrame({
 # 페이지 제목
 st.title("📊 안양시 인구 분포")
 
-# 세대별 인구 분포 시각화
-fig = px.bar(data, x="연령대", y=["남성", "여성"], barmode="group", title="세대별 인구 분포")
-st.plotly_chart(fig)
+# 세대별 인구 분포 시각화 (막대그래프)
+fig, ax = plt.subplots()
+data.plot(x="연령대", kind="bar", stacked=False, ax=ax, color=["blue", "red"])
+ax.set_ylabel("인구수")
+ax.set_title("세대별 인구 분포")
+st.pyplot(fig)
 
 # 선택된 세대 확인
 selected_age = st.selectbox("세대를 선택하세요", data["연령대"])
 
-# 성별 분포 표시
+# 성별 분포 표시 (원형그래프)
 if selected_age:
-    selected_data = data[data["연령대"] == selected_age].melt(id_vars=["연령대"], var_name="성별", value_name="인구수")
-    fig_pie = px.pie(selected_data, names="성별", values="인구수", title=f"{selected_age} 성별 분포", hole=0.3)
-    st.plotly_chart(fig_pie)
+    selected_data = data[data["연령대"] == selected_age].iloc[:, 1:3]
+    fig, ax = plt.subplots()
+    ax.pie(selected_data.values[0], labels=["남성", "여성"], autopct="%1.1f%%", colors=["blue", "red"])
+    ax.set_title(f"{selected_age} 성별 분포")
+    st.pyplot(fig)
