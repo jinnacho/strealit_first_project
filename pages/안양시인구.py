@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
+import plotly
+print(plotly.__version__)  # plotly 버전 확인
+
 
 # 데이터 로드 (예제 데이터)
 data = pd.DataFrame({
